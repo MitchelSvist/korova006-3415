@@ -13,6 +13,10 @@ class Card:
     def __repr__(self):
         return f'{self.number}_{self.penalty_point}'
 
+    def __eq__(self, other):
+        return self.number == other.number and self.penalty_point == other.penalty_point
+
+
     # def score(self) -> int:
 
     # def can_play_on(self, other) -> bool:
