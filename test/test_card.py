@@ -35,11 +35,12 @@ def test_play_on():
     c3 = Card.load('11')
     c4 = Card.load('104')
 
-    assert not c1.can_play_on(c1)
-    assert not c2.can_play_on(c1)
-    assert c1.can_play_on(c2)
-    assert not c3.can_play_on(c1)
-    assert c1.can_play_on(c4)
+    assert not c1.can_place_after(c1)
+    assert c2.can_place_after(c1)
+    assert not c1.can_place_after(c2)
+    assert c3.can_place_after(c1)
+    assert not c1.can_place_after(c4)
+    assert c4.can_place_after(c2)
 
 def test_save():
     c = Card(30)

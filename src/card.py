@@ -1,5 +1,5 @@
 class Card:
-    NUMBERS = list(range(105))
+    NUMBERS = list(range(1, 105))
 
     def __init__(self, number: int):
         if number not in Card.NUMBERS:
@@ -24,12 +24,19 @@ class Card:
         else:
             return 1
 
-    def can_play_on(self, other) -> bool:
+    def can_place_after(self, other) -> bool:
         """Можно ли играть карту self на карту other."""
-        return self.number < other.number
+        return self.number > other.number
+
+    def all_cards(numbers: None | list[int] = None):
+        if numbers is None:
+            numbers = Card.NUMBERS
+        cards = [Card(number=num) for num in numbers]
+        return cards
 
     def save(self):
         return repr(self)
 
+    @staticmethod
     def load(text: str):
         return Card(number=int(text))
