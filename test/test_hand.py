@@ -7,16 +7,16 @@ cards = [Card(3), Card(70), Card(55), Card(5), Card(104)]
 
 
 def test_init():
-    d = Hand(cards=cards)
-    assert d.cards == cards
+    h = Hand(cards=cards)
+    assert h.cards == cards
 
 
 def test_repr():
-    d = Hand(cards)
-    d1 = Hand([Card(9)])
+    h = Hand(cards)
+    h1 = Hand([Card(9)])
 
-    assert d.__repr__() == '3 70 55 5 104'
-    assert d1.__repr__() == '9'
+    assert h.__repr__() == '3 70 55 5 104'
+    assert h1.__repr__() == '9'
     assert Hand([Card(4)]).__repr__() == '4'
 
 
@@ -44,17 +44,17 @@ def test_add_card():
 
 
 def test_save():
-    d = Hand(cards=cards)
-    assert d.save() == '3 70 55 5 104'
+    h = Hand(cards=cards)
+    assert h.save() == '3 70 55 5 104'
 
-    d = Hand(cards=[])
-    assert d.save() == ''
+    h = Hand(cards=[])
+    assert h.save() == ''
 
 
 def test_load():
-    d = Hand.load('3 70 55 5 104')
+    h = Hand.load('3 70 55 5 104')
     expected_deck = Hand(cards)
-    assert d == expected_deck
+    assert h == expected_deck
 
 
 def test_score():
