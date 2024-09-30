@@ -9,11 +9,13 @@ def test_init():
     d = Deck(cards=cards)
     assert d.cards == cards
 
-# def test_init_shuffle():
-#     full_deck1 = Deck(None)
-#     full_deck2 = Deck(None)
-#     assert full_deck1.cards != full_deck2.cards
-#     assert sorted(full_deck1.cards) == sorted(full_deck2.cards)
+
+def test_init_shuffle():
+    """Проверяем, что карты в другом порядке."""
+    full_deck1 = Deck(None)
+    full_deck2 = Deck(None)
+    assert len(full_deck1.cards) == len(full_deck2.cards)
+    assert full_deck1.cards != full_deck2.cards
 
 def test_repr():
     d = Deck(cards)
@@ -43,7 +45,6 @@ def test_draw_card():
 
 def test_shuffle():
     random.seed(3)
-
     deck = Deck(cards=cards)
 
     deck.shuffle()

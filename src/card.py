@@ -12,7 +12,7 @@ class Card:
     def __eq__(self, other):
         return self.number == other.number
 
-    def score(self) -> int:
+    def penalty_score(self) -> int:
         if self.number == 55:
             return 7
         elif self.number % 11 == 0:

@@ -21,7 +21,7 @@ def test_eq():
     assert c != a
     assert c != Card(11)
 
-def test_score():
+def test_penalty_score():
     c = Card(70)
     assert 3 == c.score()
     c = Card(55)
