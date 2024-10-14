@@ -41,5 +41,16 @@ def test_truncate():
     r = Row()
     r.add_card(row1[0])
     r.add_card(row1[1])
-    r.truncate()
+    assert r.truncate() == 8
     assert r.cards == []
+
+
+def test_can_play_on():
+    r = Row()
+    assert r.can_play_on(row1[0])
+    r.add_card(row1[1])
+    assert not r.can_play_on(Card(54))
+    assert r.can_play_on(Card(56))
+    r.add_card(row1[2])
+    assert not r.can_play_on(Card(1))
+    assert r.can_play_on(Card(85))
