@@ -14,13 +14,13 @@ def test_str():
     p = Player(name='Mitchel', hand=h, score=11)
     assert str(p) == 'Mitchel(11): 55 5 95'
 
-def test_loser():
-    h = Hand.load('55 5 95')
-    p = Player(name='Mitchel', hand=h, score=65)
-    assert not p.loser()
-
-    p = Player(name='Mitchel', hand=h, score=66)
-    assert p.loser()
+# def test_loser():
+#     h = Hand.load('55 5 95')
+#     p = Player(name='Mitchel', hand=h, score=65)
+#     assert not p.loser()
+#
+#     p = Player(name='Mitchel', hand=h, score=66)
+#     assert p.loser()
 
 
 def test_eq():

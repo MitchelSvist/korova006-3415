@@ -21,9 +21,9 @@ class Player:
             and self.score == other.score \
             and self.hand == other.hand
 
-    def loser(self):
-        '''Проверка на проигрыш игрока'''
-        return self.score >= 66
+    # def loser(self):
+    #     '''Проверка на проигрыш игрока'''
+    #     return self.score >= 66
 
     def save(self) -> dict:
         return {'name': self.name,

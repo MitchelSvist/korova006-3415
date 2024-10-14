@@ -24,9 +24,9 @@ class Card:
         else:
             return 1
 
-    def can_place_after(self, other) -> bool:
-        """Можно ли играть карту self на карту other."""
-        return self.number > other.number
+    def can_place_after(new_card, last_card) -> bool:
+        """Можно ли играть карту new_card на карту last_card."""
+        return new_card.number > last_card.number
 
     def all_cards(numbers: None | list[int] = None):
         if numbers is None:

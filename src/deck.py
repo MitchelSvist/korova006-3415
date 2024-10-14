@@ -17,6 +17,7 @@ class Deck:
     def __eq__(self, other):
         return self.cards == other.cards
 
+
     def draw_card(self):
         """Берем карту из колоды и возвращаем ее."""
         return self.cards.pop()

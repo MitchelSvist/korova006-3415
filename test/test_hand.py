@@ -1,5 +1,3 @@
-import random
-
 from src.card import Card
 from src.hand import Hand
 
