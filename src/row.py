@@ -9,6 +9,9 @@ class Row:
     def __repr__(self):
         return ' '.join(repr(card) for card in self.cards)
 
+    def __eq__(self, other):
+        return self.cards == other.cards
+
     def add_card(self, card: Card):
         self.cards.append(card)
 
