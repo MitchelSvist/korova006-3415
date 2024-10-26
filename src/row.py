@@ -1,7 +1,7 @@
 from src.card import Card
 
 class Row:
-    MAX_LEN_ROW = 6
+    MAX_LEN_ROW = 5
 
     def __init__(self):
         self.cards: list[Card] = []
@@ -25,3 +25,14 @@ class Row:
 
     def can_play_on(self, card: Card) -> bool:
         return not self.cards or card.can_place_after(self.cards[-1])
+
+    def save(self) -> str:
+        return ' '.join(card.save() for card in self.cards)
+
+    @staticmethod
+    def load(data: str) -> 'Row':
+        row = Row()
+        list_cards = data.split(' ')
+        for card in list_cards:
+            row.add_card(Card.load(card))
+        return row
