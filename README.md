@@ -113,23 +113,26 @@ Bot Lose!
 
 ```json
 {
+  table:{
   "row1": "5",
   "row2": "6",
   "row3": "80",
   "row4": "24",
+  }
+  "deck": "",
   "current_player_index": 0,
   "players": [
     {
       "name": "Misha",
       "hand": "53 13 15 18 55 77 100 20 22 9",
-      "is_human": true
-      "score1":0
+      "is_human": True
+      "score":0
     },
     {
       "name": "Bot",
       "hand": "10 11 103 44 14 62 72 73 75 1",
-      "is_human": false
-      "score2":0
+      "is_human": False
+      "score":0
     }
   ]
 }

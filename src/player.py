@@ -4,9 +4,10 @@ from src.hand import Hand
 
 
 class Player:
-    def __init__(self, name: str, hand: Hand, score: int = 0):
+    def __init__(self, name: str, hand: Hand, is_human: bool = True, score: int = 0):
         self.name = name
         self.hand = hand
+        self.is_human = is_human
         self.score = score
 
     def __str__(self):
@@ -19,6 +20,7 @@ class Player:
             other = self.load(other)
         return self.name == other.name \
             and self.score == other.score \
+            and self.is_human == other.is_human \
             and self.hand == other.hand
 
     # def loser(self):
@@ -28,6 +30,7 @@ class Player:
     def save(self) -> dict:
         return {'name': self.name,
                 'hand': str(self.hand),
+                'is_human': self.is_human,
                 'score': self.score}
 
     @classmethod
