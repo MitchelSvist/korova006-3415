@@ -12,56 +12,59 @@ def test_table_init():
 def test_repr():
     table = Table()
 
-    table.add_card(Card(10), 0)
-    table.add_card(Card(40), 0)
-    table.add_card(Card(9), 0)
-    table.add_card(Card(9), 1)
+    table.add_card(Card(10))
+    table.add_card(Card(25))
+    table.add_card(Card(50))
+    table.add_card(Card(60))
+    table.add_card(Card(55))
+    table.add_card(Card(62))
+    table.add_card(Card(67))
 
-    expected_repr = f"r1: {Card(10)} {Card(40)}\nr2: {Card(9)}\nr3: \nr4: "
+
+    expected_repr = f"r1: {Card(10)}\nr2: {Card(25)}\nr3: {Card(50)} {Card(55)}\nr4: {Card(60)} {Card(62)} {Card(67)}"
     assert repr(table) == expected_repr
 
-def test_choose_row():
-    table = Table()
-    row = Row()
 
-    table.add_card(Card(10), 0)
-    table.add_card(Card(25), 0)
-    row.add_card(Card(10))
-    row.add_card(Card(25))
-
-    assert table.choose_row(0) == row
 
 def test_add_card():
     table = Table()
 
-    assert table.add_card(Card(10), 0)
-    assert table.add_card(Card(11), 0)
-    assert table.add_card(Card(55), 1)
-    assert not table.add_card(Card(54), 1)
-    assert table.add_card(Card(56), 1)
-    assert table.add_card(Card(54), 3)
-    assert table.add_card(Card(99), 3)
+    # Добавление карт
+    table.add_card(Card(10))
+    table.add_card(Card(25))
+    table.add_card(Card(50))
+    table.add_card(Card(60))
+    table.add_card(Card(55))
+    table.add_card(Card(62))
+    table.add_card(Card(67))
+    table.add_card(Card(83))
+    table.add_card(Card(100))
 
-# def test_min_card():
-#     table = Table()
-#     table.add_card(Card(10), 0)
-#     table.add_card(Card(25), 1)
-#     table.add_card(Card(11), 2)
-#     table.add_card(Card(9), 2)
-#     table.add_card(Card(12), 2)
-#     assert table.min_card() == Card(10)
+    assert repr(table[0]) == '10'
+    assert repr(table[1]) == '25'
+    assert repr(table[2]) == '50 55'
+    assert repr(table[3]) == '60 62 67 83 100'
+    assert not table.add_card(Card(1)) #нет подходящего ряда
+    assert not table.add_card(Card(9)) #нет подходящего ряда
+
+
 
 def test_save_load():
     """Сохранение и загрузку стола."""
     table = Table()
-    table.add_card(Card(10), 0)
-    table.add_card(Card(25), 1)
-    table.add_card(Card(11), 2)
-    table.add_card(Card(9), 2)
-    table.add_card(Card(12), 2)
+    table.add_card(Card(10))
+    table.add_card(Card(25))
+    table.add_card(Card(50))
+    table.add_card(Card(60))
+    table.add_card(Card(55))
+    table.add_card(Card(62))
+    table.add_card(Card(67))
+    table.add_card(Card(83))
+    table.add_card(Card(100))
+
     row = Row()
-    row.add_card(Card(11))
-    row.add_card(Card(12))
+    row.add_card(Card(50))
+    row.add_card(Card(55))
 
     saved_data = table.save()
     loaded_data = json.loads(saved_data)
@@ -71,11 +74,12 @@ def test_save_load():
 
     assert new_table[1].cards[0] == Card(25)
 
-    assert new_table[2].cards[0] == Card(11)
-    assert new_table[2].cards[1] == Card(12)
+    assert new_table[2].cards[0] == Card(50)
+    assert new_table[2].cards[1] == Card(55)
     assert new_table[2] == row
 
 
     assert len(new_table[0].cards) == 1
     assert len(new_table[1].cards) == 1
     assert len(new_table[2].cards) == 2
+    assert len(new_table[3].cards) == 5

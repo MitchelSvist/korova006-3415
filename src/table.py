@@ -11,28 +11,33 @@ class Table:
         repr_rows = [f"r{i + 1}: {repr(row)}" for i, row in enumerate(self.rows)]
         return "\n".join(repr_rows)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Row:
         return self.rows[item]
 
-    def add_card(self, card: Card, index_row: int) -> bool:
-        if self.rows[index_row].can_play_on(card):
-            self.rows[index_row].add_card(card)
-            return True
+    def add_card(self, card: Card) -> bool:
+        acceptable_rows = []
+        for row in self.rows:
+            if row.can_play_on(card):
+                acceptable_rows.append(row)
 
-    def choose_row(self, index_row: int) -> Row:
-        return self.rows[index_row]
+        if not acceptable_rows:
+            return False
 
-    # def min_card(self):
-        # return min(r[-1] for r in self.rows)
+        for row in acceptable_rows:
+            if len(f'{row}')==0: #как изменить?????????????????
+                row.add_card(card)
+                return True
+
+        best_row = min(acceptable_rows, key=lambda r: abs(card.number - r.cards[-1].number))
+        best_row.add_card(card)
+        return True
 
     def save(self) -> str:
-        return json.dumps([[card.number for card in row.cards] for row in self.rows])
+        return json.dumps({f"row{i + 1}": self.rows[i].save() for i in range(len(self.rows))})
 
     @classmethod
-    def load(cls, rows_data: list):
+    def load(cls, rows_data: dict):
         table = cls()
-        for row_index, cards in enumerate(rows_data):
-            for card_data in cards:
-                card = Card.load(f'{card_data}')
-                table.add_card(card, row_index)
+        for row_key, cards_str in rows_data.items():
+            table.rows[int(row_key[-1])-1] = Row.load(cards_str)
         return table
