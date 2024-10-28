@@ -6,7 +6,7 @@ from src.table import Table
 
 class GameState:
     """{
-  table:{
+  "table":{
   "row1": "5",
   "row2": "6",
   "row3": "80",
@@ -18,13 +18,11 @@ class GameState:
     {
       "name": "Misha",
       "hand": "53 13 15 18 55 77 100 20 22 9",
-      "is_human": True
       "score":0
     },
     {
       "name": "Bot",
       "hand": "10 11 103 44 14 62 72 73 75 1",
-      "is_human": False
       "score":0
     }
   ]
@@ -67,3 +65,6 @@ class GameState:
         """Ход переходит к следующему игроку."""
         n = len(self.players)
         self._current_player = (self._current_player + 1) % n
+
+    def play_card(self, card: Card):
+        pass
