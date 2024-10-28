@@ -23,10 +23,10 @@ class Table:
         if not acceptable_rows:
             return False
 
-        for row in acceptable_rows:
-            if len(f'{row}')==0: #как изменить?????????????????
-                row.add_card(card)
-                return True
+        # for row in acceptable_rows:
+        #     if len(f'{row}')==0: #как изменить?????????????????
+        #         row.add_card(card)
+        #         return True
 
         best_row = min(acceptable_rows, key=lambda r: abs(card.number - r.cards[-1].number))
         best_row.add_card(card)
