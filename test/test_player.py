@@ -12,7 +12,7 @@ def test_init():
 def test_str():
     h = Hand.load('55 5 95')
     p = Player(name='Mitchel', hand=h, score=11)
-    assert str(p) == 'Mitchel(11): 55 5 95'
+    assert str(p) == 'Mitchel(11): 55(7) 5(2) 95(2)'
 
 # def test_loser():
 #     h = Hand.load('55 5 95')

@@ -30,7 +30,7 @@ class Player:
 
     def save(self) -> dict:
         return {'name': self.name,
-                'hand': str(self.hand),
+                'hand': self.hand,
                 'score': self.score}
 
     @classmethod

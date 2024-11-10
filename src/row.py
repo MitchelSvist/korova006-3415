@@ -9,6 +9,9 @@ class Row:
     def __repr__(self):
         return ' '.join(repr(card) for card in self.cards)
 
+    def __str__(self):
+        return ' '.join(repr(card)+f"({card.penalty_score()})" for card in self.cards)
+
     def __eq__(self, other):
         return self.cards == other.cards
 

@@ -15,6 +15,14 @@ def test_repr():
     r.add_card(row1[1])
     assert r.__repr__() == '3 55'
 
+def test_str():
+    r = Row()
+    assert str(r) == ''
+    r.add_card(row1[0])
+    assert str(r) == '3(1)'
+    r.add_card(row1[1])
+    assert str(r) == '3(1) 55(7)'
+
 def test_add_card():
     r = Row()
     r.add_card(row1[0])

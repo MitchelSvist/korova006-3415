@@ -21,9 +21,23 @@ def test_repr():
 
 
     expected_repr = f"row1: {Card(10)}\nrow2: {Card(25)}\nrow3: {Card(50)} {Card(55)}\nrow4: {Card(60)} {Card(62)} {Card(67)}"
+    print(expected_repr)
     assert repr(table) == expected_repr
 
+def test_str():
+    table = Table()
+    table.rows[0].add_card(Card(10))
+    table.rows[1].add_card(Card(25))
+    table.rows[2].add_card(Card(50))
+    table.rows[3].add_card(Card(60))
+    table.add_card(Card(55))
+    table.add_card(Card(62))
+    table.add_card(Card(67))
 
+
+    expected_str = (f"row1: {Card(10)}(3)\nrow2: {Card(25)}(2)\nrow3: {Card(50)}(3) {Card(55)}(7)\nrow4: "
+                    f"{Card(60)}(3) {Card(62)}(1) {Card(67)}(1)")
+    assert str(table) == expected_str
 
 def test_add_card():
     table = Table()

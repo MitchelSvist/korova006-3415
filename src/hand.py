@@ -11,6 +11,9 @@ class Hand:
     def __repr__(self):
         return self.save()
 
+    def __str__(self):
+        return ' '.join(repr(card) + f"({card.penalty_score()})" for card in self.cards)
+
     def __eq__(self, other):
         if isinstance(other, str):
             other = Hand.load(other)
