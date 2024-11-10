@@ -66,5 +66,7 @@ class GameState:
         n = len(self.players)
         self._current_player = (self._current_player + 1) % n
 
-    def play_card(self, card: Card):
-        pass
+    def play_card(self, card: Card, player: Player) -> bool:
+        """Текущий игрок играет карту."""
+        player.hand.remove_card(card)
+        return self.table.add_card(card)

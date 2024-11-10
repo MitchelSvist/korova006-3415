@@ -1,13 +1,19 @@
+from pickle import PROTO
+
 import pytest
 import json
 from src.deck import Deck
 from src.game_state import GameState
 from src.player import Player
 from src.table import Table
+from src.card import Card
+from src.row import Row
+
+
 
 data = {
     "table": {
-    "row1": "5 12",
+    "row1": "5",
     "row2": "6",
     "row3": "80",
     "row4": "24",
@@ -84,3 +90,28 @@ def test_next_player(game):
     assert game.current_player().name == "Bot"
     game.next_player()
     assert game.current_player().name == "Misha"
+
+def test_play_card(game):
+    player1 = game.players[0]
+    player2 = game.players[1]
+    card1 = game.players[0].hand.cards[9]
+    card2 = game.players[1].hand.cards[0]
+
+
+    assert card1 == Card(9)
+    assert game.play_card(card1, player1)
+
+    assert card2 == Card(10)
+    assert game.play_card(card2, player2)
+
+    # Проверяем, что карты убраны из рук игроков
+    assert card1 not in player1.hand.cards
+    assert card2 not in player2.hand.cards
+
+    r = Row()
+    r.add_card(Card(6))
+    r.add_card(card1)
+    r.add_card(card2)
+
+
+    assert game.table.rows[1] == r # Обе карты добавлены в 2-й ряд
