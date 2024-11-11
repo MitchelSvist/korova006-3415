@@ -6,8 +6,8 @@ def test_init():
 
 def test_repr():
     c = Card(55)
-    assert c.__repr__() == '55'
-    assert Card.__repr__(Card(60)) == '60'
+    assert repr(c) == '55'
+    assert repr(Card(60)) == '60'
 
 def test_eq():
     a = Card(10)

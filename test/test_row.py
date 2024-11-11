@@ -9,11 +9,11 @@ def test_init():
 
 def test_repr():
     r = Row()
-    assert r.__repr__() == ''
+    assert repr(r) == ''
     r.add_card(row1[0])
-    assert r.__repr__() == '3'
+    assert repr(r) == '3'
     r.add_card(row1[1])
-    assert r.__repr__() == '3 55'
+    assert repr(r) == '3 55'
 
 def test_str():
     r = Row()

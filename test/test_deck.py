@@ -21,9 +21,9 @@ def test_repr():
     d = Deck(cards)
     d1 = Deck([Card(9)])
 
-    assert d.__repr__() == "3 70 55 5 104"
-    assert d1.__repr__() == "9"
-    assert Deck([Card(4)]).__repr__() == "4"
+    assert repr(d) == "3 70 55 5 104"
+    assert repr(d1) == "9"
+    assert repr(Deck([Card(4)])) == "4"
 
 
 def test_eq():

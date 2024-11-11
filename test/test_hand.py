@@ -13,9 +13,9 @@ def test_repr():
     h = Hand(cards)
     h1 = Hand([Card(9)])
 
-    assert h.__repr__() == '3 70 55 5 104'
-    assert h1.__repr__() == '9'
-    assert Hand([Card(4)]).__repr__() == '4'
+    assert repr(h) == '3 70 55 5 104'
+    assert repr(h1) == '9'
+    assert repr(Hand([Card(4)])) == '4'
 
 def test_str():
     h = Hand(cards)
