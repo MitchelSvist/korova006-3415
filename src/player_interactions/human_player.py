@@ -13,8 +13,10 @@ class Human(PlayerInteraction):
         """Здесь выбор карты из руки"""
         while True:
             try:
-                print("Ваши карты: ", hand)
-                card_int = int(input("Введите номер карты: "))
+                print("Ваши карты: ")
+                for card in sorted(hand.cards):
+                    print(card, end=" ")
+                card_int = int(input("\nВведите номер карты: "))
                 for card in hand.cards:
                     if card.number == card_int:
                         return card
