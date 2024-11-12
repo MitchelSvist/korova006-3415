@@ -78,7 +78,7 @@ class GameState:
         try_to_play, row = self.table.add_card(card)
         if not try_to_play and row is not None:
             point = row.truncate()
-            print(f'Игрок {player.name}({player.score}) забрал ряд {self.table.rows.index(row) + 1} и получает {point} штрафных очков')
+            print(f'Игрок {player.name}({player.score}) забрал ряд {self.table.rows.index(row) + 1} и получил {point} штрафных очков')
             player.score += point
             row.add_card(card)
             try_to_play = True

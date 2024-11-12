@@ -1,5 +1,6 @@
 import inspect
 import json
+from pathlib import Path
 
 from src.deck import Deck
 from src.game_state import GameState
@@ -25,7 +26,7 @@ class GamePhase(enum.StrEnum):
 
 class GameServer:
     INITIAL_HAND_SIZE = 10
-    CHOSEN_CARD = {} #словарь хранящий значения Игрок: выбранная карта
+    chosen_cards = {} #словарь хранящий значения Игрок: выбранная карта
     def __init__(self, player_types, game_state):
         self.game_state: GameState = game_state
         self.player_types: dict = player_types  # {player: PlayerInteractions}
@@ -33,12 +34,11 @@ class GameServer:
 
 
     @classmethod
-    def load_game(cls):
-        filename = 'korova006.json'
+    def load_game(cls, filename: str | Path):
         with open(filename, 'r') as fin:
             data = json.load(fin)
             game_state = GameState.load(data)
-            print(game_state.save())
+            # print(game_state.save())
             player_types = {}
             for player, player_data in zip(game_state.players, data['players']):
                 kind = player_data['kind']
@@ -47,8 +47,7 @@ class GameServer:
             return GameServer(player_types=player_types, game_state=game_state)
 
 
-    def save(self):
-        filename = 'korova006.json'
+    def save(self, filename: str | Path):
         data = self.save_to_dict()
         with open(filename, 'w') as fout:
             json.dump(data, fout, indent=4)
@@ -58,7 +57,7 @@ class GameServer:
         data = self.game_state.save()
         for player_index, player in enumerate(self.player_types.keys()):
             player_interaction = self.player_types[player]
-            data["players"][player_index]["kind"] = self.player_types[player].__name__
+            data["players"][player_index]["kind"] = player_interaction.__name__
         return data
 
 
@@ -119,12 +118,12 @@ class GameServer:
     def request_player_count() -> int:
         while True:
             try:
-                player_count = int(input("How many players?"))
+                player_count = int(input("Сколько игроков?"))
                 if 2 <= player_count <= 10:
                     return player_count
             except ValueError:
                 pass
-            print("Please input a number between 2 and 10")
+            print("Пожалуйста, введите число от 2 до 10")
 
 
     @staticmethod
@@ -136,18 +135,18 @@ class GameServer:
         player_types_as_str = ', '.join(player_types)
 
         while True:
-            name = input("How to call a player?")
+            name = input("Введите имя игрока?")
             if name.isalpha():
                 break
-            print("Name must be a single word, alphabetic characters only")
+            print("Имя должно состоять из одного слова и только из буквенных символов")
 
         while True:
             try:
-                kind = input(f"What kind of player is it ({player_types_as_str})?")
+                kind = input(f"Что это за игрок ({player_types_as_str})?")
                 kind = getattr(all_player_types, kind)
                 break
             except AttributeError:
-                print(f"Allowed player types are: {player_types_as_str}")
+                print(f"Разрешенными типами игроков являются: {player_types_as_str}")
         return name, kind
 
 
@@ -163,7 +162,7 @@ class GameServer:
         self.stroke_number += 1
         if self.stroke_number <= self.INITIAL_HAND_SIZE:
             print(f"\n****ХОД {self.stroke_number}****\nСостояние стола:\n"
-                  f"{self.game_state.table} \nИгроки выбирают карту")
+                  f"{self.game_state.table} \n\nИгроки выбирают карту")
             return GamePhase.CHOOSE_CARD
         else:
             return GamePhase.DECLARE_WINNER
@@ -177,10 +176,10 @@ class GameServer:
         card = self.player_types[current_player].choose_card(current_player.hand, self.game_state.table)
         self.inform_all("inform_card_chosen", current_player)
         if card:
-            print(f"{current_player.name}({current_player.score}): выбирает карту {card}")
-            self.CHOSEN_CARD[current_player] = card
+            # print(f"{current_player.name}({current_player.score}): выбирает карту {card}")
+            self.chosen_cards[current_player] = card
 
-        if len(self.CHOSEN_CARD) == len(self.player_types):
+        if len(self.chosen_cards) == len(self.player_types):
             return GamePhase.PLACE_CARD
         else:
             return GamePhase.NEXT_PLAYER
@@ -197,53 +196,65 @@ class GameServer:
     def place_card_phase(self) -> GamePhase:
 
         print("\n--- Раскрытие выбранных карт ---")
-        for player, card in self.CHOSEN_CARD.items():
+        for player, card in sorted(self.chosen_cards.items(), key=lambda x: x[1].number):
             print(f"{player.name}({player.score}): {card}")
         print("----------------------------------")
-
-        for player, card in sorted(self.CHOSEN_CARD.items(), key=lambda x: int(repr(x[1]))): # НАДА ПОМЕНЯТЬ !!!!!!!!!
-            print(f'{player.name}({player.score}): добавление карты {card}')
+        for player, card in sorted(self.chosen_cards.items(), key=lambda x: x[1].number):
+            print(f'\n{player.name}({player.score}): добавление карты {card}')
             try:
                 try_to_play = self.game_state.play_card(card, player)
                 if try_to_play:
                     print(f'Карта игрока {player.name}({player.score}) успешно добавлена в ряд стола')
                 else:
-                    print(f"Картe игрока {player.name}({player.score}) не возможно добавить на стол.")
+                    print(f"Карту игрока {player.name}({player.score}) невозможно добавить на стол.")
                     row_index = self.player_types[player].choose_row(self.game_state.table, player)
                     self.inform_all("inform_row_chosen", player, row_index)
                     points = self.game_state.table.rows[row_index].truncate()
                     player.score += points
-                    print(f"{player.name}({player.score}): забирает ряд {row_index + 1}.")
-                    print(f"\tКарта {card} становится 1-й в ряду {row_index + 1}")
+                    print(f"Карта {card} становится 1-й в ряду {row_index + 1},\nИгрок"
+                          f" {player.name}({player.score}) получает {points} штрафных балов")
                     self.game_state.table.rows[row_index].add_card(card)
-                    player.hand.remove_card(card)
                     self.inform_all("inform_card_played", card)
             except ValueError as e:
                 print(str(e))
 
         self.display_table_state()
-        self.CHOSEN_CARD = {}
+        self.chosen_cards = {}
         return GamePhase.NEXT_PLAYER
 
 
     def declare_winner_phase(self) -> GamePhase:
-        print("\nИгра закончена! Результаты игры: ")
-        for player in sorted(self.game_state.players, key=lambda x:(x.score)):
-            name_player = player.name
-            score_player = player.score
-            print(name_player, score_player)
+        print(self.game_state.table)
+        print("\n****Игра закончена!**** \nРезультаты игры: ")
+        winning_score =  min(player.score for player in self.game_state.players)
+        winners = [player for player in self.player_types.keys() if player.score == winning_score]
+        if len(winners) != 1:
+            print("Победители:")
+        else:
+            print("Победитель:")
+        for player in winners:
+            print(player.name, player.score)
+        losers = [player for player in self.player_types.keys() if player not in winners]
+        print("Проигравшие: ")
+        for player in losers:
+            print(player.name, player.score)
         return GamePhase.GAME_END
 
 
 def __main__():
-    load_from_file = False
+    load_from_file = True
+    filename_to_load = "korova006.json"
+    filename_to_save = "korova006end.json"
     if load_from_file:
-        server = GameServer.load_game()
-        server.save()
+        server = GameServer.load_game(filename_to_load)
     else:
         server = GameServer.new_game(GameServer.get_players())
+
     server.run()
+    server.save(filename_to_save)
 
 
 if __name__ == "__main__":
+    import random
+    random.seed(2)
     __main__()

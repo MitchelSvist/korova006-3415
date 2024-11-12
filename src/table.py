@@ -8,11 +8,11 @@ class Table:
         self.rows: list[Row] = [Row() for _ in range(4)]
 
     def __repr__(self):
-        repr_rows = [f"row{i + 1}: {row.__repr__()}" for i, row in enumerate(self.rows)]
+        repr_rows = [f"row{i + 1}: {repr(row)}" for i, row in enumerate(self.rows)]
         return "\n".join(repr_rows)
 
     def __str__(self):
-        str_rows = [f"row{i + 1}: {row.__str__()}" for i, row in enumerate(self.rows)]
+        str_rows = [f"row{i + 1}: {str(row)}" for i, row in enumerate(self.rows)]
         return "\n".join(str_rows)
 
     def __getitem__(self, item) -> Row:
