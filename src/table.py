@@ -18,18 +18,37 @@ class Table:
     def __getitem__(self, item) -> Row:
         return self.rows[item]
 
-    def add_card(self, card: Card) -> bool:
+    # def add_card(self, card: Card) -> bool:
+    #     acceptable_rows = []
+    #     for row in self.rows:
+    #         if row.can_play_on(card):
+    #             acceptable_rows.append(row)
+    #
+    #     if not acceptable_rows:
+    #         return False
+    #
+    #     best_row = min(acceptable_rows, key=lambda r: abs(card.number - r.cards[-1].number))
+    #     # if best_row.has_max_length():
+    #
+    #     best_row.add_card(card)
+    #     return True
+
+    def add_card(self, card: Card) -> (bool, Row):
         acceptable_rows = []
         for row in self.rows:
             if row.can_play_on(card):
                 acceptable_rows.append(row)
 
         if not acceptable_rows:
-            return False
+            return False, None
 
         best_row = min(acceptable_rows, key=lambda r: abs(card.number - r.cards[-1].number))
+
+        if best_row.has_max_length():
+            return False, best_row
+
         best_row.add_card(card)
-        return True
+        return True, best_row
 
     def save(self) -> str:
         return json.dumps({f"row{i + 1}": self.rows[i].save() for i in range(len(self.rows))})

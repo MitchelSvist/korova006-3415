@@ -66,7 +66,22 @@ class GameState:
         n = len(self.players)
         self._current_player = (self._current_player + 1) % n
 
+    # def play_card(self, card: Card, player: Player) -> bool:
+    #     """Текущий игрок играет карту."""
+    #     player.hand.remove_card(card)
+    #     return self.table.add_card(card)
+
     def play_card(self, card: Card, player: Player) -> bool:
         """Текущий игрок играет карту."""
         player.hand.remove_card(card)
-        return self.table.add_card(card)
+
+        try_to_play, row = self.table.add_card(card)
+        if not try_to_play and row is not None:
+            point = row.truncate()
+            print(f'Игрок {player.name}({player.score}) забрал ряд {self.table.rows.index(row) + 1} и получает {point} штрафных очков')
+            player.score += point
+            row.add_card(card)
+            try_to_play = True
+        return try_to_play
+
+

@@ -104,14 +104,24 @@ def test_play_card(game):
     assert card2 == Card(10)
     assert game.play_card(card2, player2)
 
+    # row1: 5(2)
+    # row2: 6(1)
+    # row3: 80(3)
+    # row4: 24(1)
+    #Проверяем что нельзя сыграть карту 1
+    assert not game.play_card(Card(1), player2)
+    #Проверяем добавление карты в ряд с 5ю картами и добавление балов игроку
+    game.table.rows[1].add_card(Card(11))
+    game.table.rows[1].add_card(Card(12))
+    # row1: 5(2)
+    # row2: 6(1) 9(1) 10(3) 11(5) 12(1)
+    # row3: 80(3)
+    # row4: 24(1)
+
+    assert game.play_card(Card(13), player1)
+    assert player1.score == 1+1+3+5+1
+
+
     # Проверяем, что карты убраны из рук игроков
     assert card1 not in player1.hand.cards
     assert card2 not in player2.hand.cards
-
-    r = Row()
-    r.add_card(Card(6))
-    r.add_card(card1)
-    r.add_card(card2)
-
-
-    assert game.table.rows[1] == r # Обе карты добавлены в 2-й ряд
