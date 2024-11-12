@@ -17,7 +17,7 @@ class Bot(PlayerInteraction):
     @classmethod
     def choose_row(cls, table: Table, player: Player) -> int:
         row_number = random.randint(0, len(table.rows) - 1)
-        print(f"{player} забирает ряд {row_number + 1}")
+        print(f"{player.name}({player.score}) забирает ряд {row_number + 1}")
         return row_number
 
     @classmethod

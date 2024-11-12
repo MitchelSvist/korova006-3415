@@ -15,9 +15,10 @@ class Human(PlayerInteraction):
             try:
                 print("Ваши карты: ", hand)
                 card_int = int(input("Введите номер карты: "))
-                card = Card.load(card_int)
-                # hand.cards.remove(card)
-                return card
+                for card in hand.cards:
+                    if card.number == card_int:
+                        return card
+                print(f"Карты {Card(card_int)} нет в руке")
             except ValueError:
                 print("Повторите ввод. Введите число, указывающее на номер карты ")
 
